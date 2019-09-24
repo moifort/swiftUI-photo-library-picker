@@ -1150,11 +1150,11 @@ public struct PhotoLibraryPicker: View {
 }
 
 @available(iOS 13.0, *)
-struct Picture : Identifiable {
-    let id = UUID()
-    let asset: PHAsset
+public struct Picture : Identifiable {
+    public let id = UUID()
+    public let asset: PHAsset
     
-    func toImage(width: Int = 100, height: Int = 100, mode: PHImageContentMode = .aspectFit) -> Image {
+    public func toImage(width: Int = 100, height: Int = 100, mode: PHImageContentMode = .aspectFit) -> Image {
         let manager = PHImageManager.default()
         let option = PHImageRequestOptions()
         var image = UIImage()
