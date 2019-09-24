@@ -1,8 +1,8 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/moifort/swiftUI-photo-library-picker)
 # Photo Library Picker for SwiftUI
 
-![sample](./sample.png)
-![sample](./sample.gif)
+![sample](./static/sample.png)
+![sample](./static/sample.gif)
 
 ## Installation with Swift Package Manager
 
