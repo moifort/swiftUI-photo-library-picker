@@ -1159,7 +1159,7 @@ public struct Picture : Identifiable {
         let option = PHImageRequestOptions()
         var image = UIImage()
         option.isSynchronous = true
-        manager.requestImage(for: asset, targetSize: CGSize(width: 100, height: 100), contentMode: mode, options: option, resultHandler: {(result, info)->Void in
+        manager.requestImage(for: asset, targetSize: CGSize(width: width, height: height), contentMode: mode, options: option, resultHandler: {(result, info)->Void in
             image = result!
         })
         return Image(uiImage: image)
