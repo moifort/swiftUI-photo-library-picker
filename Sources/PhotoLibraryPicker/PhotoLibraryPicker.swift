@@ -6,7 +6,7 @@ import AudioToolbox
 
 extension UIApplication {
     
-    class func topViewController(_ viewController: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+    class func topViewController(_ viewController: UIViewController? = UIApplication.shared.windows.first?.rootViewController) -> UIViewController? {
         if let nav = viewController as? UINavigationController {
             return topViewController(nav.visibleViewController)
         }
@@ -193,10 +193,10 @@ public extension UIColor {
         let scanner                 = Scanner(string: hexString as String)
         
         if hexString.hasPrefix("#") {
-            scanner.scanLocation = 1
+            scanner.currentIndex = scanner.string.startIndex
         }
-        var color: UInt32 = 0
-        scanner.scanHexInt32(&color)
+        var color: UInt64 = 0
+        scanner.scanHexInt64(&color)
         
         let mask = 0x000000FF
         let r = Int(color >> 16) & mask
@@ -216,7 +216,7 @@ public extension UIColor {
     ///   - green: green component.
     ///   - blue: blue component.
     ///   - transparency: optional transparency value (default is 1)
-    public convenience init(red: Int, green: Int, blue: Int, transparency: CGFloat = 1) {
+    convenience init(red: Int, green: Int, blue: Int, transparency: CGFloat = 1) {
         assert(red >= 0 && red <= 255, "Invalid red component")
         assert(green >= 0 && green <= 255, "Invalid green component")
         assert(blue >= 0 && blue <= 255, "Invalid blue component")
@@ -237,7 +237,7 @@ public extension UIColor {
 public extension UIView {
     
     /// Size of view.
-    public var size: CGSize {
+    var size: CGSize {
         get {
             return self.frame.size
         }
@@ -248,7 +248,7 @@ public extension UIView {
     }
     
     /// Width of view.
-    public var width: CGFloat {
+    var width: CGFloat {
         get {
             return self.frame.size.width
         }
@@ -258,7 +258,7 @@ public extension UIView {
     }
     
     /// Height of view.
-    public var height: CGFloat {
+    var height: CGFloat {
         get {
             return self.frame.size.height
         }
@@ -600,7 +600,7 @@ extension UIAlertController {
         
         // TODO: for iPad or other views
         let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
-        let root = UIApplication.shared.keyWindow?.rootViewController?.view
+        let root = UIApplication.shared.windows.first?.rootViewController?.view
         
         //self.responds(to: #selector(getter: popoverPresentationController))
         if let source = source {
@@ -641,7 +641,7 @@ extension UIAlertController {
         }
         
         DispatchQueue.main.async {
-            UIApplication.shared.keyWindow?.rootViewController?.present(self, animated: animated, completion: completion)
+            UIApplication.shared.windows.first?.rootViewController?.present(self, animated: animated, completion: completion)
             if vibrate {
                 AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
             }
@@ -904,6 +904,8 @@ final class PhotoLibraryPickerViewController: UIViewController {
         switch layout.scrollDirection {
         case .vertical: return UIDevice.current.userInterfaceIdiom == .pad ? 3 : 2
         case .horizontal: return 1
+        default:
+            return UIDevice.current.userInterfaceIdiom == .pad ? 3 : 2
         }
     }
     
@@ -913,6 +915,8 @@ final class PhotoLibraryPickerViewController: UIViewController {
             return CGSize(width: view.bounds.width / columns, height: view.bounds.width / columns)
         case .horizontal:
             return CGSize(width: view.bounds.width, height: view.bounds.height / columns)
+        default:
+            return CGSize(width: view.bounds.width / columns, height: view.bounds.width / columns)
         }
     }
     
@@ -1016,6 +1020,8 @@ final class PhotoLibraryPickerViewController: UIViewController {
                 self.alertController?.dismiss(animated: true)
             }
             alert.show()
+        default:
+            break
         }
     }
     
